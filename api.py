@@ -28,7 +28,7 @@ def predict():
 	data = nonlin(data)
 
 	prediction = model.predict(data)
-	print(prediction)
+	
 
 	out = []
 	for i in prediction:
