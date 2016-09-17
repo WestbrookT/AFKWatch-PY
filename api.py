@@ -10,9 +10,9 @@ app = Flask(__name__)
 def cmp(li):
 	if li[0] > li[1]:
 		#not cheating
-		return 1
+		return 0
 	#cheating
-	return 0
+	return 1
 
 @app.route('/', methods=['POST'])
 def predict():
