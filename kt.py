@@ -15,8 +15,9 @@ model.compile(optimizer='RMSprop', loss='mse')
 
 ins, out = label_file_to_list('final.json', [1, 0])
 bins, bout = label_file_to_list('bad.json', [0, 1])
-ins += bins * 3
-out += bout * 3
+print(len(bins), len(bins)*4)
+ins += bins * 4
+out += bout * 4
 
 
 def nonlin(x, deriv=False):
@@ -32,7 +33,7 @@ out = array(out)
 
 shuffle_sets(ins, out, 4)
 
-from test import bad, good
+
 
 test_in = ins[11000:]
 test_out = out[11000:]
@@ -40,7 +41,7 @@ test_out = out[11000:]
 ins = ins[:11000]
 out = out[:11000]
 
-hist = model.fit(ins, out, nb_epoch=250, batch_size=64)
+hist = model.fit(ins, out, nb_epoch=500, batch_size=64)
 # print(hist.history)
 predictions = model.predict(test_in)
 
@@ -55,14 +56,16 @@ def cmp(li):
 
 right = 0
 wrong = 0
+cheaty = 0
 for i, predict in enumerate(predictions):
-
+	if test_out[i][0] == 0:
+		cheaty += 1
 	if cmp(predict) == cmp(test_out[i]):
 		right += 1
 	else:
 		wrong += 1
 
-print("Right: ", right, " Wrong: ", wrong)
+print("Right: ", right, " Wrong: ", wrong, " Cheaty: ", cheaty)
 
 if right / (right + wrong) > .99:
 	model.save('afknet.h5')
